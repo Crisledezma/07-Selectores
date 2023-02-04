@@ -1,0 +1,64 @@
+<div class="container">
+  <h1 class="mt-5">Selectores Anidados</h1>
+  <hr />
+  <form [formGroup]="miFormulario" (ngSubmit)="guardar()">
+    <!-- Region Select -->
+    <div class="row mb-3">
+      <div class="col">
+        <label class="form-label">Continente:</label>
+        <select formControlName="region" class="form-control">
+          <option value="">-- Seleccione Continente --</option>
+          <option *ngFor="let region of regiones" [value]="region | lowercase">
+            {{ region }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <!-- Pais Select -->
+    <div *ngIf="miFormulario.value.region" class="row mb-3">
+      <div class="col">
+        <label class="form-label">Países:</label>
+        <select formControlName="pais" class="form-control">
+          <option value="">-- Seleccione País --</option>
+          <option *ngFor="let country of paises" [value]="country.cca3 | lowercase">
+            {{ country.translations['spa'].common }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <!-- Fronteras Select -->
+    <div *ngIf="miFormulario.value.pais && fronteras" class="row mb-3">
+      <div class="col">
+        <label class="form-label">Fronteras:</label>
+        <select formControlName="frontera" class="form-control">
+          <option value="">-- Seleccione Frontera --</option>
+          <option *ngFor="let border of fronteras" [value]="border.cca3">
+            {{ border.name.common }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="!fronteras"  class="row mb-3">
+      <div class="col">
+        <label class="form-label alert alert-danger">Este país no tiene fronteras</label>
+      </div>
+    </div>
+    <div *ngIf="cargando"  class="row mb-3">
+      <div class="col">
+        <label class="form-label alert alert-primary">Cargando...</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-primary float-end mb-3 mt-3" type="submit">
+          Seleccionar
+        </button>
+      </div>
+    </div>
+  </form>
+  <h3>Formulario</h3>
+  <pre> valid: {{ miFormulario.valid }}</pre>
+  <pre> value: {{ miFormulario.value | json }}</pre>
+  <hr>
+  <h3>Paises: </h3><pre>{{ paises | json }}</pre>
+</div>
